@@ -14,3 +14,7 @@ color = Color([1, 2, 3])
 print(color.rgba)
 color.rgba = [3, 2, 1]
 print(color.rgba)
+
+setattr(color, 'rgba', [10, 11, 12])
+print(color.rgba)
+print(getattr(color, 'rgba'))
