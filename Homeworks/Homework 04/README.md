@@ -119,6 +119,7 @@ Can build?
 Ако методът can_build е извикан на инстанция, той проверява само материалите направени с тази инстанция.
 Ако извикаме метод can_build_together на класа Factory, проверява всички материали създадени (и не преизползвани) от всички инстанции.
 
+```python
 factory1 = Factory()
 brick1, wood1 = factory1(Brick=2000, Wood=1200)
 print(brick1.volume)  # 1.0
@@ -136,6 +137,7 @@ print(brick_wood2.volume)  # 2.46...
 print(factory2.can_build(3))  # False
 
 print(Factory.can_build_together(3))  # True
+```
 
 **Апендикс за изчисляване на нова плътност**
 Ако имате два материала, например Wood и Concrete, и ги обедините в сплав, плътността на новия материал е (2500 + 600) / 2 = 1550.
