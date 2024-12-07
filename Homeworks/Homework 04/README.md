@@ -113,3 +113,34 @@ brick_wood2 = factory2(brick2, wood2)  # Използва съществуващ
 
 print(type(brick_wood1) is type(brick_wood2))  # True
 ```
+
+Can build?
+И последно. Искаме да можем да видим дали материалите, създадени (и не преизползвани) от всички фабрики са достатъчно за изграждане на стена. Оценката се случва спрямо обемите на въпросните материали.
+Ако методът can_build е извикан на инстанция, той проверява само материалите направени с тази инстанция.
+Ако извикаме метод can_build_together на класа Factory, проверява всички материали създадени (и не преизползвани) от всички инстанции.
+
+factory1 = Factory()
+brick1, wood1 = factory1(Brick=2000, Wood=1200)
+print(brick1.volume)  # 1.0
+print(wood1.volume)  # 2.0
+brick_wood1 = factory1(brick1, wood1)
+print(brick_wood1.volume)  # 2.46...
+print(factory1.can_build(3))  # False
+
+factory2 = Factory()
+brick2, wood2 = factory2(Brick=2000, Wood=1200)
+print(brick2.volume)  # 1.0
+print(wood2.volume)  # 2.0
+brick_wood2 = factory2(brick2, wood2)
+print(brick_wood2.volume)  # 2.46...
+print(factory2.can_build(3))  # False
+
+print(Factory.can_build_together(3))  # True
+
+**Апендикс за изчисляване на нова плътност**
+Ако имате два материала, например Wood и Concrete, и ги обедините в сплав, плътността на новия материал е (2500 + 600) / 2 = 1550.
+Ако към тази сплав добавите и Steel, плътността не може да се изчисли като средно аритметично от Concrete_Wood и Steel, защото те имат различно съотношение.
+Такава сметка би дала резултат (1550 + 7700) / 2 = 4625. Това е грешно.
+Правилната сметка трябва да направите като използвате трите основни материала, които са използвани:
+(density of Concrete + density of Steel + density of Wood) / 3.
+(2500 + 7700 + 600) / 3 = 3600.
