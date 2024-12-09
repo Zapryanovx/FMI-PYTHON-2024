@@ -37,7 +37,7 @@ print(dir(5))  # Показва атрибутите и методите на о
 
 - `type(<тип>)` връща `<class 'type'>`.
 - `type(type(<...>))` винаги връща `<class 'type'>`.
-- Генераторите връщат `<class 'generator'>`.
+- В случая последното отпечатва `<class 'generator'>`, защото се извиква върху обект от тип генератор.
 
 ```python
 print(type(map))  # <class 'type'>
