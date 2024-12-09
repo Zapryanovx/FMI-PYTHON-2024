@@ -123,3 +123,121 @@ print(things_i_like[0] is things_you_like[1])  # И двете сочат към
 ```
 
 ---
+
+
+## Списък с референция към себе си
+
+```python
+cheeses = ['brie', 'bergkäse', 'kashkaval', 'leipäjuusto']
+cheeses.append(cheeses)
+cheeses[-1] is cheeses  # True
+print(cheeses)  # ['brie', 'bergkäse', 'kashkaval', 'leipäjuusto', [...]]
+```
+
+Списъкът `cheeses` има референция към себе си на позиция 4, което създава бездънна рекурсия.
+
+```python
+print(cheeses[4][4][4][4][4][4][4][4][4][4][0])  # brie
+```
+
+### Прекъсване на рекурсията
+
+Ако заменим елемента на позиция 4, рекурсията ще се прекъсне, тъй като `cheeses[4]` е референция.
+
+```python
+cheeses[4][4][4][4][4][4][4][4][4][4] = 'neshto'
+print(cheeses)  # ['brie', 'bergkäse', 'kashkaval', 'leipäjuusto', 'neshto']
+```
+
+След прекъсване на рекурсията:
+
+```python
+try:
+    cheeses[4][4][4][4][4][4][4][4][4][4] = 'neshto'
+except IndexError as err:
+    print(str(err))  # string index out of range
+```
+
+---
+
+## Unpacking
+
+```python
+(a, b) = 1, 2
+print(a)  # 1
+
+a, b = 1, 2
+print(a)  # 1
+
+numbers = (1, 2, 3)
+a, b, c = numbers
+print(a)  # 1
+
+a, *b, c = 1, 2, 3, 4, 5
+print(a)  # 1
+print(b)  # [2, 3, 4]
+print(c)  # 5
+```
+
+`*b` сигнализира, че `b` ще разопакова символите между `a` и `c`. Например:
+
+```python
+try:
+    a, b, c = 1, 2, 3, 4, 5
+except ValueError as err:
+    print(str(err))  # too many values to unpack (expected 3)
+```
+
+---
+
+## Не можем да сравняваме tuple и list
+
+```python
+try:
+    print((1, 2) < [1, 2])
+except TypeError as err:
+    print(str(err))  # '<' not supported between instances of 'tuple' and 'list'
+```
+
+---
+
+## Множества
+
+### Обединение на множества
+
+```python
+print({1, 2, 3} | {2, 3, 4})  # {1, 2, 3, 4}
+```
+
+### Пресичане на множества
+
+```python
+print({1, 2, 3} & {2, 3, 4})  # {2, 3}
+```
+
+### Разлика на множества
+
+```python
+print({1, 2, 3} - {2, 3, 4})  # {1}
+```
+
+### Симетрична разлика на множества
+
+```python
+print({1, 2, 3} ^ {2, 3, 4})  # {1, 4}
+```
+
+### Проверка дали едно множество е подмножество на друго
+
+```python
+print({1, 2, 3} < {2, 3, 4})  # False
+print({2, 3} < {2, 3, 4})     # True
+```
+
+### Сравнение на множества
+
+```python
+print({2, 3} == {2.0, 3})     # True
+```
+
+---
