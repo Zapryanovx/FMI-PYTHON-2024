@@ -1,133 +1,125 @@
 # Python Основи: Обяснения и Примери
 
-## `help()` - Извличане на документация
-
-Функцията `help()` печата документацията на обекта, подаден в скобите. Документацията се съдържа в **docstring**-овете.
+## Какъв ще е резултатът от следните операции?
 
 ```python
-print(help(5))  # Печата документацията за типа `int`
+print(3 / 2)  # 1.5
+print(3 // 2)  # 1
+print(0.1 + 0.2)  # 0.30000000000000004
+print(0.1 + 0.1)  # 0.2
+print(0.5 - 0.2)  # 0.3
+print(0.3 / 3)  # 0.09999999999999999
 ```
 
-### Пример с функция
+**[Note]** Важно е да се отбележи, че има особености при дробните числа поради представянето им в паметта (представят се в двоичен формат вместо десетичен и някои такива не могат да бъдат точно представени).
+
+---
+
+## Какъв е типът?
+
 ```python
-def test():
-    """eto edin"""
-    
-    print("""gotin primer""")
-    
-# help(test)
-# Печата само docstring-овете, които описват функцията, т.е. стойността "eto edin".
+things = ['eggs', ('spam', 'spam', 'spam'), 'ham']
+print(type(things[1][2][3]))  # <class 'str'>
+print(things[1][2][3])  # 'm'
+```
+**В Python няма тип `char`, има само `str` (низ).**
+
+### Грешки при immutable обекти:
+
+```python
+things = ['eggs', ('spam', 'spam', 'spam'), 'ham']
+try:
+    things[1][2][3] = 'h'
+except TypeError as err:
+    print(str(err))  # 'str' object does not support item assignment
 ```
 
 ---
 
-## `dir()` - Атрибути и методи на обект
-
-Функцията `dir()` се използва за извличане на списък с имената на атрибутите и методите, които са достъпни за даден обект.
+## Низовете също са immutable
 
 ```python
-print(dir(5))  # Показва атрибутите и методите на обекта от тип `int`
+print(type(things[1][2][3]))  # <class 'str'>
 ```
-
-> **[Note]** В Python всичко е обект.
-
----
-
-## `type()` - Определяне на типа на обект
-
-- `type(<тип>)` връща `<class 'type'>`.
-- `type(type(<...>))` винаги връща `<class 'type'>`.
-- В случая последното отпечатва `<class 'generator'>`, защото се извиква върху обект от тип генератор.
-
-```python
-print(type(map))  # <class 'type'>
-print(type(filter))  # <class 'type'>
-print(type(list))  # <class 'type'>
-
-print(type(type("tip")))  # <class 'type'>
-print(type((i for i in range(5))))  # <class 'generator'>
-```
-
----
-
-## Сравняване на обекти
-
-- Можем да сравняваме различни типове числа:
-```python
-print(3 < 5.4)  # True
-```
-
-- Можем да сравняваме стрингове лексикографски:
-```python
-print("asd" < "asdd")  # True
-print("asd" == "asd")  # True
-```
-
----
-
-## Референции в Python
-
-В Python всичко е по референция:
-```python
-a = [1, 2, 3]
-b = a
-b.append(4)
-print(a)  # [1, 2, 3, 4]
-```
-
----
-
-## Хетерогенни колекции
-
-Колекциите в Python могат да съдържат елементи от различни типове:
-```python
-my_list = []
-my_list.append('word')
-my_list.append(5)
-my_list.append(False)
-print(my_list)  # ['word', 5, False]
-```
-
----
-
-## Slicing: Нарязване на списъци
-
-Синтаксисът на slicing е: `[x:y:z]` 
-- `x` - Начало (включително)
-- `y` - Край (без включване)
-- `z` - Стъпка на итерация
-
-### Примери:
-```python
-cute_animals = ['cat', 'raccoon', 'panda', 'red panda', 'marmot']
-
-print(cute_animals[1:3])  # ['raccoon', 'panda']
-print(cute_animals[-1])  # 'marmot'
-print(cute_animals[1:-1])  # ['raccoon', 'panda', 'red panda']
-print(cute_animals[::-1])  # ['marmot', 'red panda', 'panda', 'raccoon', 'cat']
-print(cute_animals[-1:0:-1])  # ['marmot', 'red panda', 'panda', 'raccoon']
-print(cute_animals[-1:0:-2])  # ['marmot', 'panda']
-```
-
-> **[Note]** Когато стъпката е отрицателна, елементите се разместват в обратен ред.
 
 ---
 
 ## Mutable vs Immutable
 
-- **Mutable (променими)** обекти:
+### Списъците са mutable (можем да променяме техните елементи):
+
 ```python
-args1 = [9.8, 3.14, 2.71]
-args1[1] = 'lorem ipsum'
-print(args1)  # [9.8, 'lorem ipsum', 2.71]
+things[1] = 'ham'
+print(things)  # ['eggs', 'ham', 'ham']
 ```
 
-- **Immutable (непроменими)** обекти:
-```python
-args2 = (9.8, 3.14, 2.71)
+### Кортежите са immutable (не можем да променяме техните елементи):
 
+```python
+things[1] = ('spam', 'spam', 'spam')  # Ако не го върнем към началното състояние, отново ще имаме случая, в който не можем да променим string.
 try:
-    args2[1] = 'lorem ipsum'
+    things[1][2] = 'ham'  # things[1] е tuple (immutable) => не можем да променим негов елемент.
 except TypeError as err:
     print(str(err))  # 'tuple' object does not support item assignment
 ```
+
+---
+
+## `is` vs `==`
+
+- **`is`** проверява дали е една и съща инстанция.
+- **`==`** проверява дали съдържанието на двете инстанции е едно и също (може двете инстанции да са една).
+
+### Пример:
+
+```python
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+
+print(a == b)  # True - съдържанието е едно и също
+print(a is b)  # False - различни обекти
+print(a == c)  # True - съдържанието е едно и също
+print(a is c)  # True - сочат към един и същ обект
+```
+
+---
+
+## Списъците съдържат "референции" към елементи.
+
+```python
+coffee, cheese, crackers, tea = 'coffee', 'cheese', 'crackers', 'tea'
+
+# Unpacking
+things_i_like = [coffee, cheese, crackers]
+things_you_like = [crackers, coffee, tea]
+
+print(things_i_like[0] == things_you_like[1])  # Съдържанието е едно и също => True
+print(things_i_like[0] is things_you_like[1])  # И двете сочат към едно и също нещо => True
+
+things_i_like[0] = 'kafe'  # Това пренасочва референцията на първата клетка към 'kafe', не променя обекта coffee
+
+print(things_i_like[0] == things_you_like[1])  # Съдържанието вече не е едно и също => False
+print(things_i_like[0] is things_you_like[1])  # Вече сочат към различни неща => False
+```
+
+---
+
+## Също така
+
+```python
+coffee, cheese, crackers, tea = 'coffee', 'cheese', 'crackers', 'tea'
+
+things_i_like = [coffee, cheese, crackers]
+things_you_like = [crackers, coffee, tea]
+
+print(things_i_like[0] == things_you_like[1])  # Съдържанието е едно и също => True
+print(things_i_like[0] is things_you_like[1])  # И двете сочат към едно и също нещо => True
+
+things_i_like[0] = 'coffee'  # Това пренасочва референцията на първата клетка към 'coffee', не променя обекта coffee
+
+print(things_i_like[0] == things_you_like[1])  # Съдържанието е едно и също => True
+print(things_i_like[0] is things_you_like[1])  # И двете сочат към едно и също нещо ('coffee') => True
+```
+
+---
